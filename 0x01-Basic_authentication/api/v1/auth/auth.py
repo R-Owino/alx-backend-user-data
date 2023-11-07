@@ -29,6 +29,8 @@ class Auth:
 
     def authorization_header(self, request=None) -> str:
         """
+        Args:
+            - request: Flask request object
         Returns:
           - The value of the header request Authorization
         """
