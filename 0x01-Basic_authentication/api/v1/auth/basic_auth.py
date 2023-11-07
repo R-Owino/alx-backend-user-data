@@ -86,3 +86,17 @@ class BasicAuth(Auth):
                 return user
 
         return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        Args:
+            - request: Flask request object
+        Returns:
+            - None
+        """
+        header = self.authorization_header(request)
+        extract = self.extract_base64_authorization_header(header)
+        decode = self.decode_base64_authorization_header(extract)
+        credentials = self.extract_user_credentials(decode)
+        return self.user_object_from_credentials(credentials[0],
+                                                 credentials[1])
