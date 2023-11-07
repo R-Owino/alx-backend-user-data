@@ -20,7 +20,7 @@ class Auth:
         Returns:
           - True if path is not in the list of strings excluded_paths
         """
-        if path is None or excluded_paths is None or excluded_paths:
+        if path is None or excluded_paths is None or excluded_paths == []:
             return True
         if path[-1] != '/':
             path += '/'
