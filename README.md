@@ -1,4 +1,4 @@
-## User Data
+## User Data and Authentication
 
 1. Personal Data
 2. Basic Authentication
