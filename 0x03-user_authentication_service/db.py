@@ -36,7 +36,8 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> None:
-        """Add a user to the database
+        """
+        Adds a user to the database
         """
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
@@ -62,3 +63,24 @@ class DB:
         if user is None:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        Updates a user's attributes in the DB
+
+        Args:
+            user_id (int): user id
+            kwargs (dict): key/value pairs to update user attributes
+
+        Raises:
+            ValueError: if user_id is not linked to any user object in the DB
+            ValueError: if any of kwargs keys are not attibutes of the User
+            class
+        """
+        user = self.find_user_by(id=user_id)
+        for k, v in kwargs.items():
+            if k not in user.__dict__:
+                raise ValueError
+            setattr(user, k, v)
+        self._session.commit()
+        return None
