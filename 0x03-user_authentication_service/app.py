@@ -49,8 +49,9 @@ def logout():
     user = AUTH.get_user_from_session_id(session_id)
     if not user or not session_id:
         abort(403)
-    AUTH.destroy_session(user.id)
-    return redirect('/')
+    else:
+        AUTH.destroy_session(user.id)
+        return redirect('/')
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
@@ -60,7 +61,8 @@ def profile():
     user = AUTH.get_user_from_session_id(session_id)
     if not user or not session_id:
         abort(403)
-    return jsonify({"email": user.email}), 200
+    else:
+        return jsonify({"email": user.email}), 200
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
