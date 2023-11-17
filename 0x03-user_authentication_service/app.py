@@ -22,9 +22,8 @@ def users():
     email = request.form.get('email')
     password = request.form.get('password')
     try:
-        user = AUTH.register_user(email, password)
-        return jsonify({"email": user.email,
-                        "message": "user created"}), 200
+        AUTH.register_user(email, password)
+        return jsonify({"email": f"{email}", "message": "user created"})
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
@@ -47,20 +46,20 @@ def logout():
     """ logout user """
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
-    if not user or not session_id:
-        abort(403)
-    AUTH.destroy_session(user.id)
-    return redirect('/')
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect('/')
+    abort(403)
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile():
-    """ get profile user """
+    """ get user's profile """
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
-    if not user or not session_id:
-        abort(403)
-    return jsonify({"email": user.email}), 200
+    if user:
+        return jsonify({"email": user.email}), 200
+    abort(403)
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
