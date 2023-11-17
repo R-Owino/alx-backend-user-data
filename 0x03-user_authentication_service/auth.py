@@ -35,6 +35,7 @@ class Auth:
             if user:
                 raise ValueError(f'User {email} already exists')
         except NoResultFound:
+            # no user found with that email, so we can create one
             hashed_password = _hash_password(password)
             return self._db.add_user(email, hashed_password)
 
@@ -61,13 +62,15 @@ class Auth:
         except NoResultFound:
             return None
 
-    def get_user_from_session_id(self, session_id: str) -> str:
+    def get_user_from_session_id(self, session_id: str) -> User:
         """
         Finds a user by session ID
         """
+        if not session_id:
+            return None
         try:
             user = self._db.find_user_by(session_id=session_id)
-            return user.email
+            return user
         except NoResultFound:
             return None
 
